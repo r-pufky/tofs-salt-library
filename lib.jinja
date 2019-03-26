@@ -42,7 +42,7 @@
                        default_rank=['id', 'os', 'os_family'],
                        indent_width=6) %}
   {#-
-  Returns valid list of 'source' parameters using TOFS pattern.
+  Return valid list of 'source' parameters using TOFS pattern.
 
   Args:
     prefix: String pillar prefix to custom :files_switch. Colons (:) are
@@ -71,7 +71,7 @@
 
 {%- macro key_value_formatter(key, value) %}
   {#-
-  Returns a key:value pair with a space between.
+  Return key:value pair using a space separator.
 
   Lists will automatically be rendered with the same key for each list item.
 
