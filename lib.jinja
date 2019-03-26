@@ -39,7 +39,7 @@
 
 {%- macro files_switch(prefix,
                        files,
-                       default_files_switch=['id', 'os', 'os_family'],
+                       default_rank=['id', 'os', 'os_family'],
                        indent_width=6) %}
   {#-
   Returns valid list of 'source' parameters using TOFS pattern.
@@ -48,21 +48,18 @@
     prefix: String pillar prefix to custom :files_switch. Colons (:) are
         replaced by forward slash (/) to be used as directory prefix.
     files: Ordered List of Strings containing full path of files to look for.
-    default_files_switch: Ordered List of Strings to use as keys to search
-        grains for most specific match of a host to a subdirectory. Only used if
-        no pillar prefix:files_switch exists.
-        Default: ['id', 'os', 'os_family'].
+    default_rank: Ordered List of Strings to use as keys to search grains for
+        most specific match of a host to a subdirectory. Only used if no pillar
+        prefix:files_switch exists. Default: ['id', 'os', 'os_family'].
     indent_width: Integer indentation of the result value to conform to YAML.
         Default: 6.
   #}
 
   {%- set path_prefix = prefix|replace(':', '/') %}
-  {%- set files_switch_list = salt['pillar.get'](prefix ~ ':files_switch',
-                                           default_files_switch) %}
-  {%- for grain in files_switch_list if grains.get(grain) is defined %}
+  {%- set file_rank = salt['pillar.get'](prefix ~ ':files_switch', default_rank) %}
+  {%- for grain in file_rank if grains.get(grain) is defined %}
     {%- for file in files %}
-    {%- set url = '- salt://' ~ path_prefix ~ '/files/' ~
-                  grains.get(grain) ~ file %}
+    {%- set url = '- salt://' ~ path_prefix ~ '/files/' ~ grains.get(grain) ~ file %}
 {{ url | indent(indent_width, true) }}
     {%- endfor %}
   {%- endfor %}
