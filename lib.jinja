@@ -6,15 +6,15 @@
                      default_rank=['id', 'os', 'os_family'],
                      indent_width=6) %}
   {#-
-  Return valid single directories for 'source' parameter using TOFS pattern.
+  Return valid single directory for 'source' parameter using TOFS pattern.
 
-  Params:
-    prefix: String pillar prefix to custom :dir_switch. Colons (:) are are
-        replaced by forward slash (/) to be used as directory prefix.
+  Args:
+    prefix: String pillar prefix to custom :dir_switch. Colons (:) are replaced
+        by forward slash (/) to be used as directory prefix.
     target: String full path directory to manage. This should appear as it would
         on the target system (e.g. /etc/skel).
-    default_rank: List of Strings to use as keys to search grains for most
-        specific match of a host to a subdiretory. Only used if no pillar
+    default_rank: Ordered List of Strings to use as keys to search grains for
+        most specific match of a host to a subdiretory. Only used if no pillar
         prefix:dir_switch exists. Default: ['id', 'os', 'os_family'].
     indent_width: Integer ndentation of the result value to conform to YAML.
         Default: 6.
@@ -42,18 +42,18 @@
                        default_files_switch=['id', 'os', 'os_family'],
                        indent_width=6) %}
   {#-
-  Returns a valid value for the "source" parameter of a "file.managed"
-  state function. This makes easier the usage of the Template Override and
-  Files Switch (TOFS) pattern.
+  Returns valid list of 'source' parameters using TOFS pattern.
 
-  Params:
-    prefix: pillar prefix to custom ':files_switch'. Colons ':' are replaced by
-        '/' to be used as directory prefix.
-    files: ordered list of files to look for, with full path.
-    default_files_switch: if there's no pillar 'prefix:files_switch' this is the
-        ordered list of grains to use as selector switch of the directories
-        under "prefix/files".
-    indent_witdh: indentation of the result value to conform to YAML.
+  Args:
+    prefix: String pillar prefix to custom :files_switch. Colons (:) are
+        replaced by forward slash (/) to be used as directory prefix.
+    files: Ordered List of Strings containing full path of files to look for.
+    default_files_switch: Ordered List of Strings to use as keys to search
+        grains for most specific match of a host to a subdirectory. Only used if
+        no pillar prefix:files_switch exists.
+        Default: ['id', 'os', 'os_family'].
+    indent_width: Integer indentation of the result value to conform to YAML.
+        Default: 6.
   #}
 
   {%- set path_prefix = prefix|replace(':', '/') %}
@@ -74,12 +74,13 @@
 
 {%- macro key_value_formatter(key, value) %}
   {#-
-  Returns a key:value pair with a space between. Lists will automatically
-  be rendered with the same key for each list item.
+  Returns a key:value pair with a space between.
 
-  Params:
-    key: The config keyword to render
-    value: The data for the keyword
+  Lists will automatically be rendered with the same key for each list item.
+
+  Args:
+    key: String config keyword to render.
+    value: Object data for the keyword.
   #}
 
   {%- if value is iterable and value is not string %}
