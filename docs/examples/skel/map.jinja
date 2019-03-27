@@ -1,0 +1,27 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+# Layering precendence: pillar > os > os_family > defaults
+
+{# import static formula defaults, and default overrides #}
+{% import_yaml 'skel/defaults.yaml' as defaults %}
+{% import_yaml 'skel/os_family_map.yaml' as os_family %}
+{% import_yaml 'skel/os_map.yaml' as os %}
+
+{# Get pillar specific default lookup overrides #}
+{% set skel_lookup = salt['pillar.get']('skel:lookup', {}).copy() %}
+
+{# Set OS specific settings; override with any lookup settings from pillar #}
+{% set skel = salt['grains.filter_by'](
+    defaults,
+    merge=salt['grains.filter_by'](
+      os_family,
+      grain='os_family',
+      merge=salt['grains.filter_by'](
+        os,
+        grain='os',
+        merge=skel_lookup,
+      ),
+    ),
+    base='skel',
+)
+%}

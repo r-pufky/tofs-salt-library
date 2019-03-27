@@ -1,0 +1,7 @@
+# Managed by saltstack.
+#
+# Deleting this file will force re-sync managed skel files.
+
+.managed_by_salt
+.ssh/
+bin/

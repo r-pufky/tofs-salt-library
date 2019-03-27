@@ -1,0 +1,92 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{#- TOFS:0.0.1 #}
+
+{%- macro dir_switch(prefix,
+                     target,
+                     default_rank=['id', 'os', 'os_family'],
+                     indent_width=6) %}
+  {#-
+  Return valid single directory for 'source' parameter using TOFS pattern.
+
+  Args:
+    prefix: String pillar prefix to custom :dir_switch. Colons (:) are replaced
+        by forward slash (/) to be used as directory prefix.
+    target: String full path directory to manage. This should appear as it would
+        on the target system (e.g. /etc/skel).
+    default_rank: Ordered List of Strings to use as keys to search grains for
+        most specific match of a host to a subdiretory. Only used if no pillar
+        prefix:dir_switch exists. Default: ['id', 'os', 'os_family'].
+    indent_width: Integer ndentation of the result value to conform to YAML.
+        Default: 6.
+  }
+
+  {%- set path_prefix = prefix|replace(':', '/') %}
+  {%- set dir_rank = salt['pillar.get'](prefix ~ ':dir_switch', default_rank) %}
+
+  {%- for grain in dir_rank %}
+    {%- if grains.get(grain) is defined %}
+      {%- set url = '- salt://' ~ path_prefix ~ '/files/' ~ grains.get(grain) ~ target %}
+      {%- break %}
+    {%- endif %}
+  {%- endfor %}
+
+  {%- if url is not defined %}
+    {%- set url = '- salt://' ~ path_prefix ~ '/files/default' ~ target %}
+  {%- endif %}
+
+{{ url | indent(indent_width, true) }}
+{%- endmacro %}
+
+{%- macro files_switch(prefix,
+                       files,
+                       default_rank=['id', 'os', 'os_family'],
+                       indent_width=6) %}
+  {#-
+  Return valid list of 'source' parameters using TOFS pattern.
+
+  Args:
+    prefix: String pillar prefix to custom :files_switch. Colons (:) are
+        replaced by forward slash (/) to be used as directory prefix.
+    files: Ordered List of Strings containing full path of files to look for.
+    default_rank: Ordered List of Strings to use as keys to search grains for
+        most specific match of a host to a subdirectory. Only used if no pillar
+        prefix:files_switch exists. Default: ['id', 'os', 'os_family'].
+    indent_width: Integer indentation of the result value to conform to YAML.
+        Default: 6.
+  #}
+
+  {%- set path_prefix = prefix|replace(':', '/') %}
+  {%- set file_rank = salt['pillar.get'](prefix ~ ':files_switch', default_rank) %}
+  {%- for grain in file_rank if grains.get(grain) is defined %}
+    {%- for file in files %}
+    {%- set url = '- salt://' ~ path_prefix ~ '/files/' ~ grains.get(grain) ~ file %}
+{{ url | indent(indent_width, true) }}
+    {%- endfor %}
+  {%- endfor %}
+    {%- for file in files %}
+    {%- set url = '- salt://' ~ path_prefix ~ '/files/default' ~ file %}
+{{ url | indent(indent_width, true) }}
+    {%- endfor %}
+{%- endmacro %}
+
+{%- macro key_value_formatter(key, value) %}
+  {#-
+  Return key:value pair using a space separator.
+
+  Lists will automatically be rendered with the same key for each list item.
+
+  Args:
+    key: String config keyword to render.
+    value: Object data for the keyword.
+  #}
+
+  {%- if value is iterable and value is not string %}
+    {%- for token in value %}
+{{ key }} {{ token }}
+    {%- endfor %}
+  {%- else %}
+{{ key }} {{ value }}
+  {%- endif %}
+{%- endmacro %}

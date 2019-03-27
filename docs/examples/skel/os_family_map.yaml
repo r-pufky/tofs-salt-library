@@ -1,0 +1,16 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+# 'os_family' grain formula settings. May be overridden with pillar.
+# layering precedence: pillar > os > os_family > defaults
+
+Debian:
+  location: /etc/skel
+  clean: True
+  include_empty: True
+  onlyif: /etc/skel/.managed_by_salt
+
+default:
+  location: /etc/skel
+  clean: True
+  include_empty: True
+  onlyif: /etc/skel/.managed_by_salt

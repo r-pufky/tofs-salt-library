@@ -2,6 +2,9 @@
 TOFS formula library for use in saltstack formula creation.
 
 See [TOFS design concepts here](docs/TOFS_pattern.rst).
+* See [screen example in docs](docs/examples/screen/) for files_switch and
+  key_value_formatter example.
+* See [skel example in docs](docs/examples/skel/) for dir_switch example.
 
 Original concept/code from:
 

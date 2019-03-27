@@ -1,8 +1,12 @@
+* See [screen example](examples/screen/) for files_switch/key_value_formatter
+  example.
+* See [skel example](examples/skel/) for dir_switch example.
+
 dir_switch
 ==========
 Return valid single directories for 'source' parameter using TOFS pattern.
 
-Params:
+Args:
   prefix: String pillar prefix to custom :dir_switch. Colons (:) are are
       replaced by forward slash (/) to be used as directory prefix.
   target: String full path directory to manage. This should appear as it would
@@ -57,18 +61,17 @@ Default value (no matching pillar, os, os_family).
 
 files_switch
 ============
-Returns a valid value for the "source" parameter of a "file.managed"
-state function. This makes easier the usage of the Template Override and
-Files Switch (TOFS) pattern.
+Return valid list of 'source' parameters using TOFS pattern.
 
-Params:
-  * prefix: pillar prefix to custom ':files_switch'. Colons ':'
-    are replaced by '/' to be used as directory prefix
-  * files: ordered list of files to look for, with full path
-  * default_files_switch: if there's no pillar 'prefix:files_switch'
-    this is the ordered list of grains to use as selector switch of the
-    directories under "prefix/files"
-  * indent_witdh: indentation of the result value to conform to YAML
+Args:
+  prefix: String pillar prefix to custom :files_switch. Colons (:) are
+      replaced by forward slash (/) to be used as directory prefix.
+  files: Ordered List of Strings containing full path of files to look for.
+  default_rank: Ordered List of Strings to use as keys to search grains for
+      most specific match of a host to a subdirectory. Only used if no pillar
+      prefix:files_switch exists. Default: ['id', 'os', 'os_family'].
+  indent_width: Integer indentation of the result value to conform to YAML.
+      Default: 6.
 
 Example:
 
@@ -97,12 +100,13 @@ rendered as:
 
 key_value_formatter
 ==================
-Returns a key:value pair with a space between. Lists will automatically
-be rendered with the same key for each list item.
+Return key:value pair using a space separator.
 
-Params:
-  * key: The config keyword to render
-  * value: The data for the keyword
+Lists will automatically be rendered with the same key for each list item.
+
+Args:
+  key: String config keyword to render.
+  value: Object data for the keyword.
 
 Example 1:
   bind:
