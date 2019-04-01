@@ -308,16 +308,13 @@ We can simplify the ``conf.sls`` with the new ``files_switch`` macro to use in t
 
    {%- set tplroot = tpldir.split('/')[0] %}
    {%- from 'ntp/map.jinja' import ntp with context %}
-   {%- from 'ntp/lib.jinja' import files_switch %}
+   {%- import 'ntp/lib.jinja' as tofs with context %}
 
    Configure NTP:
      file.managed:
        - name: {{ ntp.config }}
        - template: jinja
-       - source: {{ files_switch(['/etc/ntp.conf.jinja'],
-                                 lookup='Configure NTP'
-                    )
-                 }}
+       - source: {{ tofs.files_switch(['/etc/ntp.conf.jinja'], lookup='Configure NTP') }}
        - watch_in:
          - service: Enable and start NTP service
        - require:

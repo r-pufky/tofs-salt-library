@@ -5,12 +5,12 @@ include:
   - screen
 
 {%- from "screen/map.jinja" import screen with context -%}
-{% from "screen/lib.jinja" import files_switch with context %}
+{%- import "screen/lib.jinja" as tofs with context %}
 
 {{ screen.config }}:
   file.managed:
     - template: jinja
-    - source: {{ files_switch('screen', ['/etc/screenrc', '/etc/screenrc.jinja']) }}
+    - source: {{ tofs.files_switch('screen', ['/etc/screenrc', '/etc/screenrc.jinja']) }}
     - mode: 0644
     - user: root
     - group: root

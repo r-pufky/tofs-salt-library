@@ -1,4 +1,4 @@
-{%- from 'screen/lib.jinja' import key_value_formatter with context -%}
+{%- import 'screen/lib.jinja' as tofs with context -%}
 {%- from 'screen/map.jinja' import screen with context -%}
 # Managed by saltstack.
 #
@@ -10,5 +10,5 @@
 #
 
 {%- for key, value in screen.system|dictsort -%}
-{{ key_value_formatter(key, value) }}
+{{ tofs.key_value_formatter(key, value) }}
 {%- endfor -%}

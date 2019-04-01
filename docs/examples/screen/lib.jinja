@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim: ft=jinja
 
-{#- TOFS:0.0.1 #}
+{#- TOFS:0.0.2 #}
 
 {%- macro dir_switch(prefix,
                      target,
@@ -20,7 +20,7 @@
         prefix:dir_switch exists. Default: ['id', 'os', 'os_family'].
     indent_width: Integer ndentation of the result value to conform to YAML.
         Default: 6.
-  }
+  #}
 
   {%- set path_prefix = prefix|replace(':', '/') %}
   {%- set dir_rank = salt['pillar.get'](prefix ~ ':dir_switch', default_rank) %}

@@ -2,7 +2,7 @@
 # vim: ft=salt
 
 {% from "screen/map.jinja" import screen with context %}
-  
+
 screen_main_pkgs:
   pkg.installed:
     - name: {{ screen.pkgs|json }}

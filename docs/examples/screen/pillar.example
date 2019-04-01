@@ -8,7 +8,7 @@ screen:
     config: /etc/screenrc
 
   # Can define additional custom grains for host matching. See README.
-  files_switch: []   
+  files_switch: []
 
   # Example system screenrc config. Options are generated from key:value pairs
   # defined from screenrc.

@@ -6,6 +6,14 @@ Detailed method usage instructions.
   specific examples.
 * See [skel example](examples/skel/) for dir_switch specific example.
 
+### Import TOFS lib for usage
+Import the library and use the macros below.
+
+```jinja
+{%- import "skel/lib.jinja" as tofs with context %}
+```
+
+
 dir_switch
 ----------
 Return valid single directories for 'source' parameter using TOFS pattern.
